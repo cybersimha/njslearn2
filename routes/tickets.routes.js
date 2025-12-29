@@ -8,6 +8,8 @@ router.get('/', ticketController.getAllTickets);
 
 router.get('/status/:status', ticketController.getTicketsByStatus);
 
+router.put('/:id/assign', ticketController.assignTicket);
+
 router.get('/:id/details', ticketController.getTicketWithResponses);
 
 router.put('/:id/resolve', ticketController.resolveTicket);
@@ -20,5 +22,7 @@ router.post('/:id/respond', ticketController.addRepResponse);
 router.put('/:id/claim', ticketController.claimTicket);
 
 router.get('/:id', ticketController.getTicketById);
+
+router.get('/customer/:phone', ticketController.getTicketsByPhone);
 
 module.exports = router;

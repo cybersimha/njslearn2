@@ -119,6 +119,21 @@ async function claimTicket(ticketId, repName) {
   return true;
 }
 
+async function getTicketsByPhone(phone) {
+  return await ticketRepository.getTicketsByPhone(phone);
+}
+
+async function assignTicket(ticketId, repId, adminId) {
+  const ticket = await ticketRepository.getTicketById(ticketId);
+
+  if (!ticket) return null;
+
+  return await ticketRepository.assignTicket(
+    ticketId,
+    repId,
+    adminId
+  );
+}
 
 module.exports = {
     createTicket,
@@ -129,5 +144,7 @@ module.exports = {
     reopenTicket,
     getTicketWithResponses,
     getTicketsByStatus,
-    claimTicket  
+    claimTicket,
+    getTicketsByPhone  ,
+    assignTicket
 };

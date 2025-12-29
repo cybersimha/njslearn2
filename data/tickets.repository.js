@@ -87,7 +87,42 @@ async function countTicketsByStatus(status) {
   return rows[0].total;
 }
 
+async function getTicketsByPhone(phone) {
+  const query = `
+    SELECT
+      id,
+      reference_id,
+      subject,
+      status,
+      created_at
+    FROM tickets
+    WHERE phone = ?
+    ORDER BY created_at DESC
+  `;
 
+  const [rows] = await pool.execute(query, [phone]);
+  return rows;
+}
+
+async function assignTicket(ticketId, repId, adminId) {
+  const query = `
+    UPDATE tickets
+    SET
+      assigned_to = ?,
+      assigned_by = ?,
+      assigned_at = CURRENT_TIMESTAMP,
+      status = 'IN_PROGRESS'
+    WHERE id = ?
+  `;
+
+  const [result] = await pool.execute(query, [
+    repId,
+    adminId,
+    ticketId
+  ]);
+
+  return result.affectedRows > 0;
+}
 
 
 module.exports = {
@@ -98,5 +133,7 @@ module.exports = {
     resolveTicket,
     getOpenTickets,
     getTicketsByStatus,
-    countTicketsByStatus
+    countTicketsByStatus,
+    getTicketsByPhone,
+    assignTicket
 };  

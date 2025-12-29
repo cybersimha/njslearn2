@@ -163,6 +163,37 @@ async function claimTicket(req, res) {
   return res.status(200).json({ message: 'Ticket claimed successfully' });
 }
 
+async function getTicketsByPhone(req, res) {
+  const { phone } = req.params;
+
+  const tickets = await ticketService.getTicketsByPhone(phone);
+  return res.status(200).json(tickets);
+}
+
+async function assignTicket(req, res) {
+  const { id } = req.params;
+  const { repId, adminId } = req.body;
+
+  if (!repId || !adminId) {
+    return res
+      .status(400)
+      .json({ message: 'repId and adminId required' });
+  }
+
+  const result = await ticketService.assignTicket(
+    id,
+    repId,
+    adminId
+  );
+
+  if (!result) {
+    return res.status(404).json({ message: 'Ticket not found' });
+  }
+
+  return res.status(200).json({ message: 'Ticket assigned' });
+}
+
+
 module.exports = {
   createTicket,
   getTicketById,
@@ -172,5 +203,7 @@ module.exports = {
   reopenTicket,
   getTicketWithResponses,
   getTicketsByStatus,
-  claimTicket 
+  claimTicket,
+  getTicketsByPhone ,
+  assignTicket
 };
